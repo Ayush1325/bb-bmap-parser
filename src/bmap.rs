@@ -1,15 +1,8 @@
-use strum::{Display, EnumDiscriminants, EnumString};
 use thiserror::Error;
+use xml::HashType;
 mod xml;
 
-#[derive(Copy, Clone, Debug, PartialEq, Eq, EnumString, Display)]
-#[strum(serialize_all = "lowercase")]
-#[non_exhaustive]
-pub enum HashType {
-    Sha256,
-}
-
-#[derive(Copy, Clone, Debug, PartialEq, Eq, EnumDiscriminants)]
+#[derive(Copy, Clone, Debug, PartialEq, Eq)]
 #[non_exhaustive]
 pub enum HashValue {
     Sha256([u8; 32]),
@@ -202,12 +195,9 @@ impl BmapBuilder {
 #[cfg(test)]
 mod test {
     use super::*;
-    use std::str::FromStr;
 
     #[test]
     fn hashes() {
-        assert_eq!("sha256", &HashType::Sha256.to_string());
-        assert_eq!(HashType::Sha256, HashType::from_str("sha256").unwrap());
         let h = HashValue::Sha256([0; 32]);
         assert_eq!(HashType::Sha256, h.to_type());
     }
