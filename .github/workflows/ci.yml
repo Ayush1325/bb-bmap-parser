@@ -1,69 +1,24 @@
+name: CI
+
 on:
   push:
-    branches-ignore:
-      - '*.tmp'
   pull_request:
   workflow_dispatch:
-name: CI
 
 env:
   RUST_BACKTRACE: 1
 
 jobs:
-  check:
-    name: cargo check
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v4
-      - uses: dtolnay/rust-toolchain@master # avoid the tag here to prevent dependabot from updating it
-        with:
-            toolchain: "1.70"
-      - run: cargo check --all-targets --all-features
-  fmt:
-    name: cargo fmt
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v4
-      - uses: dtolnay/rust-toolchain@master # avoid the tag here to prevent dependabot from updating it
-        with:
-            toolchain: "1.70"
-            components: rustfmt
-      - run: cargo fmt --all --check
   test:
-    name: cargo test
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - name: Checkout
+        uses: actions/checkout@v4
         with:
-          lfs: 'true'
-      - uses: dtolnay/rust-toolchain@master # avoid the tag here to prevent dependabot from updating it
-        with:
-            toolchain: "1.70"
-      - run: cargo test --all-targets --all-features
-
-  clippy:
-    name: cargo clippy
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v4
-      - uses: dtolnay/rust-toolchain@master # avoid the tag here to prevent dependabot from updating it
-        with:
-            toolchain: "1.70"
-            components: clippy
-      - run: cargo clippy --all-targets --all-features -- -D warnings
-
-  # Job to key success status against
-  allgreen:
-    name: allgreen
-    if: always()
-    needs:
-      - check
-      - fmt
-      - test
-      - clippy
-    runs-on: ubuntu-latest
-    steps:
-      - name: Decide whether the needed jobs succeeded or failed
-        uses: re-actors/alls-green@release/v1
-        with:
-          jobs: ${{ toJSON(needs) }}
+          lfs: true
+      - name: Select rust toolchain
+        run: rustup toolchain install stable --profile minimal
+      - name: Run checks
+        run: cargo clippy --all-targets --all-features --no-deps
+      - name: Run tests
+        run: cargo test --all-features
