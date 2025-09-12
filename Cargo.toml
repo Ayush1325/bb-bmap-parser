@@ -1,7 +1,6 @@
 [workspace]
 members = [
   "bmap-parser",
-  "bmap-rs",
 ]
 
 # Most of the actual work is CPU-heavy, in particular the rust sha2
