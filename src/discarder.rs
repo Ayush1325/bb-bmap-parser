@@ -1,5 +1,4 @@
 use crate::{AsyncSeekForward, SeekForward};
-use async_trait::async_trait;
 use futures::io::{AsyncRead, AsyncReadExt};
 use std::io::Read;
 use std::io::Result as IOResult;
@@ -64,7 +63,6 @@ impl<R: AsyncRead + Unpin> AsyncRead for AsyncDiscarder<R> {
     }
 }
 
-#[async_trait]
 impl<R: AsyncRead + Unpin + Send> AsyncSeekForward for AsyncDiscarder<R> {
     async fn async_seek_forward(&mut self, forward: u64) -> IOResult<()> {
         let mut buf = [0; 4096];

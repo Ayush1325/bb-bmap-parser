@@ -2,9 +2,8 @@ mod bmap;
 pub use crate::bmap::*;
 mod discarder;
 pub use crate::discarder::*;
-use async_trait::async_trait;
-use futures::io::{AsyncRead, AsyncReadExt, AsyncSeek, AsyncSeekExt, AsyncWrite, AsyncWriteExt};
 use futures::TryFutureExt;
+use futures::io::{AsyncRead, AsyncReadExt, AsyncSeek, AsyncSeekExt, AsyncWrite, AsyncWriteExt};
 use sha2::{Digest, Sha256};
 use thiserror::Error;
 
@@ -23,12 +22,10 @@ impl<T: Seek> SeekForward for T {
     }
 }
 
-#[async_trait]
 pub trait AsyncSeekForward {
-    async fn async_seek_forward(&mut self, offset: u64) -> IOResult<()>;
+    fn async_seek_forward(&mut self, offset: u64) -> impl Future<Output = IOResult<()>>;
 }
 
-#[async_trait]
 impl<T: AsyncSeek + Unpin + Send> AsyncSeekForward for T {
     async fn async_seek_forward(&mut self, forward: u64) -> IOResult<()> {
         self.seek(SeekFrom::Current(forward as i64)).await?;
