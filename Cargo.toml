@@ -1,10 +1,26 @@
-[workspace]
-members = [
-  "bmap-parser",
-]
+[package]
+name = "bmap-parser"
+version = "0.2.0"
+authors = ["Sjoerd Simons <sjoerd@collabora.com>"]
+edition = "2018"
+license = "MIT AND Apache-2.0"
+description = "bmap-parser is a library for Rust that allows you to copy files or flash block devices safely"
+repository = "https://github.com/collabora/bmap-rs"
+readme = "../README.md"
 
-# Most of the actual work is CPU-heavy, in particular the rust sha2
-# implementation so use full optimisations otherwise everything will run quite
-# slow
+# See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
+
+[dependencies]
+thiserror = "1.0.24"
+quick-xml = { version = "0.31.0", features = [ "serialize" ] }
+serde = { version = "1.0.147", features = [ "derive" ] }
+anyhow = { version = "1.0.40", optional = true }
+sha2 = { version = "0.10.6", features = [ "asm" ] }
+strum = { version = "0.26.1", features = [ "derive"] }
+digest = "0.10.5"
+flate2 = "1.0.20"
+async-trait = "0.1.58"
+futures = "0.3.25"
+
 [profile.dev]
 opt-level = 3
