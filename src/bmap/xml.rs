@@ -1,8 +1,14 @@
-use crate::bmap::{BmapBuilder, BmapBuilderError, HashType, HashValue};
-use quick_xml::de::{from_str, DeError};
+use crate::bmap::{BmapBuilder, BmapBuilderError, HashValue};
+use quick_xml::de::{DeError, from_str};
 use serde::Deserialize;
-use std::str::FromStr;
 use thiserror::Error;
+
+#[derive(Copy, Clone, Debug, PartialEq, Eq, Deserialize)]
+#[serde(rename_all = "lowercase")]
+#[non_exhaustive]
+pub enum HashType {
+    Sha256,
+}
 
 #[derive(Debug, Deserialize)]
 struct Range {
@@ -32,7 +38,7 @@ struct Bmap {
     #[serde(rename = "MappedBlocksCount")]
     mapped_blocks_count: u64,
     #[serde(rename = "ChecksumType")]
-    checksum_type: String,
+    checksum_type: HashType,
     #[serde(rename = "BmapFileChecksum")]
     bmap_file_checksum: String,
     #[serde(rename = "BlockMap")]
@@ -89,8 +95,6 @@ pub(crate) fn from_xml(xml: &str) -> Result<crate::bmap::Bmap, XmlError> {
     let b: Bmap = from_str(xml)?;
     let mut builder = BmapBuilder::default();
     let hash_type = b.checksum_type;
-    let hash_type =
-        HashType::from_str(&hash_type).map_err(|_| XmlError::UnknownChecksumType(hash_type))?;
     builder
         .image_size(b.image_size)
         .block_size(b.block_size)
