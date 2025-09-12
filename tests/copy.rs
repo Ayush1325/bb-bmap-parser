@@ -1,4 +1,4 @@
-use bmap_parser::{Bmap, Discarder, SeekForward};
+use bb_bmap_parser::{Bmap, Discarder, SeekForward};
 use flate2::read::GzDecoder;
 use sha2::{Digest, Sha256};
 use std::env;
@@ -153,8 +153,8 @@ fn copy() {
     let (bmap, mut input) = setup_data("test.img");
     let mut output = OutputMock::new(bmap.image_size());
 
-    bmap_parser::copy(&mut input, &mut output, &bmap).unwrap();
-    assert_eq!(bmap_parser::HashType::Sha256, bmap.checksum_type());
+    bb_bmap_parser::copy(&mut input, &mut output, &bmap).unwrap();
+    assert_eq!(bb_bmap_parser::HashType::Sha256, bmap.checksum_type());
     assert_eq!(bmap.block_map().len(), output.ranges.len());
 
     // Assert that written ranges match the ranges in the map file

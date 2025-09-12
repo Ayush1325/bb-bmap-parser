@@ -1,22 +1,8 @@
-# bmap-rs
+# bb-bmap-parser
 
-The bmap-rs project aims to implement tools related to bmap. The project is written in
-rust. The inspiration for it is an existing project that is written in python called 
-[bmap-tools](https://salsa.debian.org/debian/bmap-tools). 
+This project is a fork of [bmap-rs](https://github.com/collabora/bmap-rs) which does not seem to be merging new changes anymore. It is meant to be used as a general purpose bmap file parser.
 
-Right now the implemented function is copying system images files using bmap, which is
-safer and faster than regular cp ro dd. That can be used to flash images into block
-devices.
-
-## Usage
-bmap-rs supports 1 subcommand:
-- "copy" - copy a file to another file using a bmap file.
-```bash
-bmap-rs copy <SOURCE_PATH> <TARGET_PATH>
-```
-
-The bmap file is automatically searched in the source directory. The recommendation is 
-to name it as the source but with bmap extension.
+It is being used in [BeagleBoard Imaging Utility](https://github.com/beagleboard/bb-imager-rs).
 
 ## License
 bmap-rs is licensed under dual Apache-2.0 and MIT licenses.
