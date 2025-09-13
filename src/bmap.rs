@@ -1,6 +1,6 @@
+use crate::xml::HashType;
+
 use thiserror::Error;
-use xml::HashType;
-mod xml;
 
 #[derive(Copy, Clone, Debug, PartialEq, Eq)]
 #[non_exhaustive]
@@ -59,8 +59,8 @@ impl Bmap {
     }
 
     /// Build from a .bmap xml file
-    pub fn from_xml(xml: &str) -> Result<Self, xml::XmlError> {
-        xml::from_xml(xml)
+    pub fn from_xml(xml: &str) -> Result<Self, crate::xml::XmlError> {
+        crate::xml::from_xml(xml)
     }
 
     /// Image size in bytes
