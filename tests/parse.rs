@@ -1,6 +1,5 @@
 use bb_bmap_parser::Bmap;
-use digest::Digest;
-use sha2::Sha256;
+use sha2::{Sha256, Digest};
 
 #[test]
 fn parse() {
